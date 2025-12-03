@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HR Email Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f4f8;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 12px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+
+    .radio-group {
+      margin-top: 10px;
+    }
+
+    .radio-group input {
+      width: auto;
+    }
+
+    .preview-box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 10px;
+      background: #f9f9f9;
+      min-height: 100px;
+      white-space: pre-line;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      border: none;
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .success {
+      color: green;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>HR Email Tool</h2>
+
+  <form id="emailForm" action="send-email.php" method="POST">
+
+    <label>Candidate Name</label>
+    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+    <label>Candidate Email</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+    <label>Position Applied</label>
+    <input type="text" id="position" name="position" placeholder="Type your position" required>
+
+    <label>Status</label>
+    <div class="radio-group">
+      <input type="radio" name="status" value="selected" > Selected
+      <input type="radio" name="status" value="rejected"> Rejected
+    </div>
+
+    <label>Email Preview</label>
+    <div class="preview-box" id="preview"></div>
+
+    <button type="submit">Send Email</button>
+
+    <div id="message"></div>
+  </form>
+</div>
+
+<script>
+  const nameInput = document.getElementById("name");
+  const positionInput = document.getElementById("position");
+  const previewBox = document.getElementById("preview");
+  const radios = document.querySelectorAll("input[name='status']");
+
+  function updatePreview() {
+    const name = nameInput.value;
+    const position = positionInput.value;
+    const status = document.querySelector("input[name='status']:checked").value;
+
+    let message = "";
+
+    if (status === "selected") {
+      message = `Dear ${name},
+
+We are pleased to inform you that you have been selected for the position of ${position}.
+
+Please reply to this email to confirm your acceptance.
+
+Best regards,
+HR Team`;
+    } else {
+      message = `Dear ${name},
+
+Thank you for applying for the position of ${position}.
+
+We regret to inform you that we have decided to move forward with other candidates.
+
+Best regards,
+HR Team`;
+    } 
+
+    previewBox.innerText = message;
+  }
+
+  nameInput.addEventListener("input", updatePreview);
+  positionInput.addEventListener("input", updatePreview);
+  radios.forEach(radio => radio.addEventListener("change", updatePreview));
+
+  updatePreview();
+</script>
+
+</body>
+</html>
